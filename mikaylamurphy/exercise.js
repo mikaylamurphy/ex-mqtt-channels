@@ -19,7 +19,7 @@ exercise.ConnectToServer = function(address){
     // -------------------------------
 	// ---------- Your Code ----------
 	// -------------------------------
-
+    client = mqtt.connect(address, 1883)
     exercise.client = client;
 };
 
@@ -29,6 +29,8 @@ exercise.SubscribeToAllSensorData = function(){
     // -------------------------------
 	// ---------- Your Code ----------
 	// -------------------------------
+    client.subscribe('device/#');
+
 };
 
 exercise.SubscribeToTemperatureDataOnly = function(){
@@ -38,6 +40,7 @@ exercise.SubscribeToTemperatureDataOnly = function(){
     // -------------------------------
 	// ---------- Your Code ----------
 	// -------------------------------
+    client.subscribe('device/+/temperature')
 };
 
 exercise.LogChannelsReceived = function(){
@@ -47,6 +50,11 @@ exercise.LogChannelsReceived = function(){
     // -------------------------------
 	// ---------- Your Code ----------
 	// -------------------------------
+    exercise.client.on('message', function(channel, message){
+        exercise.channelsReceived.push(channel);
+    })
+    //exercise.channelsReceived = exercise.channelsReceived.filter(function(item, i, ar){ return ar.indexOf(item) === i; });
+
 };
 
 exercise.Disconnect = function(){
@@ -54,6 +62,7 @@ exercise.Disconnect = function(){
     // -------------------------------
     // ---------- Your Code ----------
     // -------------------------------
+    client.end()
 };
 
 module.exports = exercise;
